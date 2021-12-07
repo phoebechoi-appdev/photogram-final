@@ -11,14 +11,20 @@ class UsersController < ApplicationController
   end
 
   def liked_photos
+    the_username = params.fetch("path_username")
+    @user = User.where({ :username => the_username }).at(0)
     render({ :template => "users/liked_photos.html.erb" })
   end
 
   def feed
+    the_username = params.fetch("path_username")
+    @user = User.where({ :username => the_username }).at(0)
     render({ :template => "users/feed.html.erb" })
   end
 
   def discover
+    the_username = params.fetch("path_username")
+    @user = User.where({ :username => the_username }).at(0)
     render({ :template => "users/discover.html.erb" })
   end
 end
