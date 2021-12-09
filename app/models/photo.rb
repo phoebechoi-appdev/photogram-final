@@ -14,10 +14,6 @@
 class Photo < ApplicationRecord
   validates(:poster, { :presence => true })
   validates(:image, { :presence => true })
-  
-  # def fan_list
-  #   return fans.pluck(:username).to_sentence
-  # end
 
   has_many :comments, :dependent => :destroy
   has_many :likes, :dependent => :destroy

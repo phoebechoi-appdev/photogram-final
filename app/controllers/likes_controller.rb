@@ -4,6 +4,7 @@ class LikesController < ApplicationController
 
     @list_of_likes = matching_likes.order({ :created_at => :desc })
 
+    @likes = Like.all.order({ :created_at => :desc })
     render({ :template => "likes/index.html.erb" })
   end
 
@@ -12,45 +13,45 @@ class LikesController < ApplicationController
 
     matching_likes = Like.where({ :id => the_id })
 
-    @the_like = matching_likes.at(0)
+    @like = matching_likes.at(0)
 
     render({ :template => "likes/show.html.erb" })
   end
 
   def create
-    the_like = Like.new
-    the_like.photo_id = params.fetch("query_photo_id")
-    the_like.fan_id = params.fetch("query_fan_id")
+    @like = Like.new
+    @like.photo_id = params.fetch("query_photo_id")
+    @like.fan_id = @current_user.id
 
-    if the_like.valid?
-      the_like.save
-      redirect_to("/likes", { :notice => "Like created successfully." })
+    if @like.valid?
+      @like.save
+      redirect_to("/photos/#{@like.photo_id}", { :notice => "Like created successfully." })
     else
-      redirect_to("/likes", { :notice => "Like failed to create successfully." })
+      redirect_to("/photos/#{@like.photo_id}", { :notice => "Like failed to create successfully." })
     end
   end
 
   def update
     the_id = params.fetch("path_id")
-    the_like = Like.where({ :id => the_id }).at(0)
+    @like = Like.where({ :id => the_id }).at(0)
 
-    the_like.photo_id = params.fetch("query_photo_id")
-    the_like.fan_id = params.fetch("query_fan_id")
+    @like.photo_id = params.fetch("query_photo_id")
+    @like.fan_id = params.fetch("query_fan_id")
 
-    if the_like.valid?
-      the_like.save
-      redirect_to("/likes/#{the_like.id}", { :notice => "Like updated successfully."} )
+    if @like.valid?
+      @like.save
+      redirect_to("/likes/#{@like.id}", { :notice => "Like updated successfully."} )
     else
-      redirect_to("/likes/#{the_like.id}", { :alert => "Like failed to update successfully." })
+      redirect_to("/likes/#{@like.id}", { :alert => "Like failed to update successfully." })
     end
   end
 
   def destroy
     the_id = params.fetch("path_id")
-    the_like = Like.where({ :id => the_id }).at(0)
+    @like = Like.where({ :id => the_id }).at(0)
 
-    the_like.destroy
+    @like.destroy
 
-    redirect_to("/likes", { :notice => "Like deleted successfully."} )
+    redirect_to("/photos/#{@like.photo_id}", { :notice => "Like deleted successfully."} )
   end
 end
