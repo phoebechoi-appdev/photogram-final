@@ -1,9 +1,10 @@
 <h1>List of photos</h1>
 
 <% if @current_user.present? %>
-<form action="/insert_photo" method="post">
-  <label for="browser_input">Image</label>
-  <input id="browser_input" type="text" name="query_image" placeholder="Enter a URL for the image...">
+
+<form action="/insert_photo" method="post" class="form-horizontal" enctype="multipart/form-data">
+  <label for="image">Image</label>
+  <input type="file" id="image" name="image" class="form-control">
 
   <label for="browser_caption">Caption</label>
   <textarea id="browser_caption" name="query_caption" placeholder="Enter a caption for the photo..."></textarea>
@@ -28,7 +29,7 @@
   <% @photos.each do |photo| %>
     <tr>
       <td>
-        <img src="<%= photo.image %>">
+        <img src="<%= photo.image %>" class="img-responsive">
       </td>
     
       <td>

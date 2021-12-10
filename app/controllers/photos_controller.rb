@@ -1,9 +1,12 @@
 class PhotosController < ApplicationController
+
   def index
     matching_photos = Photo.all
 
     @list_of_photos = matching_photos.order({ :created_at => :desc })
+    
     @photos = Photo.joins(:poster).all.where({ :users => { :private => false } }).order({ :created_at => :desc })
+    
     render({ :template => "photos/index.html.erb" })
   end
 
@@ -20,7 +23,7 @@ class PhotosController < ApplicationController
   def create
     @photo = Photo.new
     @photo.caption = params.fetch("query_caption")
-    @photo.image = params.fetch("query_image")
+    @photo.image = params.fetch("image")
     @photo.owner_id = @current_user.id
 
     if @photo.valid?
@@ -36,7 +39,7 @@ class PhotosController < ApplicationController
     @photo = Photo.where({ :id => the_id }).at(0)
 
     @photo.caption = params.fetch("query_caption")
-    @photo.image = params.fetch("query_image")
+    @photo.image = params.fetch("image")
 
     if @photo.valid?
       @photo.save
